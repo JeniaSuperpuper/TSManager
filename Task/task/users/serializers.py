@@ -17,6 +17,11 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
+    def get_avatar(self, obj):
+        if obj.avatar:
+            return self.context['request'].build_absolute_uri(obj.avatar.url)
+        return None
+
     def update(self, instance, validated_data):
         instance.username = validated_data.get('username', instance.username)
         instance.first_name = validated_data.get('first_name', instance.first_name)

@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from .models import Project, Task, Comment
 from user_messages.models import Message
-from task.utils import send_mail
+from django.core.mail import send_mail
+
 
 class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
@@ -27,6 +28,7 @@ class ProjectSerializer(serializers.ModelSerializer):
                 project=project,
                 task=None
             )
+            user.user_projects.add(project)
 
         return project
 
