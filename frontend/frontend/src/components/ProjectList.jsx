@@ -6,7 +6,7 @@ const ProjectList = ({ onProjectSelect }) => {
     const [projects, setProjects] = useState([]);
     const [users, setUsers] = useState([]);
     const [error, setError] = useState('');
-    const [sortBy, setSortBy] = useState('created_asc'); // По умолчанию сортировка по времени создания (от старых к новым)
+    const [sortBy, setSortBy] = useState('created'); // По умолчанию сортировка по времени создания (от старых к новым)
     const [currentUserId, setCurrentUserId] = useState(null);
     const [isSuperuser, setIsSuperuser] = useState(false);
     const [editingProjectId, setEditingProjectId] = useState(null);
@@ -23,6 +23,9 @@ const ProjectList = ({ onProjectSelect }) => {
                 const response = await axios.get('http://127.0.0.1:8000/api/v1/projects/', {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+                    },
+                    params: {
+                        ordering: sortBy,
                     }
                 });
                 setProjects(response.data);
@@ -54,39 +57,10 @@ const ProjectList = ({ onProjectSelect }) => {
 
         fetchProjects();
         fetchUsers();
-    }, []);
+    }, [sortBy]);
 
     const handleSortChange = (e) => {
         setSortBy(e.target.value);
-    };
-
-    const applySort = () => {
-        let sortedProjects = [...projects];
-
-        switch (sortBy) {
-            case 'created_asc':
-                sortedProjects.sort((a, b) => new Date(a.created) - new Date(b.created));
-                break;
-            case 'created_desc':
-                sortedProjects.sort((a, b) => new Date(b.created) - new Date(a.created));
-                break;
-            case 'updated_asc':
-                sortedProjects.sort((a, b) => new Date(a.update) - new Date(b.update));
-                break;
-            case 'updated_desc':
-                sortedProjects.sort((a, b) => new Date(b.update) - new Date(a.update));
-                break;
-            case 'title_asc':
-                sortedProjects.sort((a, b) => a.title.localeCompare(b.title));
-                break;
-            case 'title_desc':
-                sortedProjects.sort((a, b) => b.title.localeCompare(a.title));
-                break;
-            default:
-                break;
-        }
-
-        setProjects(sortedProjects);
     };
 
     const filterProjectsByUser = () => {
@@ -152,14 +126,13 @@ const ProjectList = ({ onProjectSelect }) => {
             <div className="sort-controls">
                 <label className='label_sort' htmlFor="sortBy">Сортировать по:</label>
                 <select  className='sort_by' id="sortBy" value={sortBy} onChange={handleSortChange}>
-                    <option value="created_asc">Времени создания (от старых к новым)</option>
-                    <option value="created_desc">Времени создания (от новых к старым)</option>
-                    <option value="updated_asc">Времени обновления (от старых к новым)</option>
-                    <option value="updated_desc">Времени обновления (от новых к старым)</option>
-                    <option value="title_asc">Названию (от А до Я)</option>
-                    <option value="title_desc">Названию (от Я до А)</option>
+                    <option value="created">Времени создания (от старых к новым)</option>
+                    <option value="-created">Времени создания (от новых к старым)</option>
+                    <option value="update">Времени обновления (от старых к новым)</option>
+                    <option value="-update">Времени обновления (от новых к старым)</option>
+                    <option value="title">Названию (от А до Я)</option>
+                    <option value="-title">Названию (от Я до А)</option>
                 </select>
-                <button className='button' onClick={applySort}>Применить сортировку</button>
             </div>
             {error && <div className="error-message">{error}</div>}
             {editingProjectId ? (

@@ -5,10 +5,42 @@ from rest_framework import generics
 from .models import Project, Task, Comment
 # Create your views here.
 
+from rest_framework import generics
+from django.db.models import Q
+
 class ProjectView(generics.ListCreateAPIView):
-    queryset = Project.objects.all()
     serializer_class = ProjectSerializer
     permission_classes = (IsAuthenticatedOrReadOnly, )
+
+    def get_queryset(self):
+        queryset = Project.objects.all()
+
+        # Сортировка
+        ordering = self.request.query_params.get('ordering', None)
+        if ordering:
+            queryset = queryset.order_by(ordering)
+
+        # Фильтрация
+        created_from = self.request.query_params.get('created_from', None)
+        created_to = self.request.query_params.get('created_to', None)
+        updated_from = self.request.query_params.get('updated_from', None)
+        updated_to = self.request.query_params.get('updated_to', None)
+
+        if created_from and created_to:
+            queryset = queryset.filter(created__range=(created_from, created_to))
+        elif created_from:
+            queryset = queryset.filter(created__gte=created_from)
+        elif created_to:
+            queryset = queryset.filter(created__lte=created_to)
+
+        if updated_from and updated_to:
+            queryset = queryset.filter(update__range=(updated_from, updated_to))
+        elif updated_from:
+            queryset = queryset.filter(update__gte=updated_from)
+        elif updated_to:
+            queryset = queryset.filter(update__lte=updated_to)
+
+        return queryset
 
 class ProjectUpdate(generics.RetrieveUpdateDestroyAPIView):
     queryset = Project.objects.all()

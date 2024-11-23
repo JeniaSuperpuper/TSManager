@@ -27,7 +27,7 @@ services:
 
   frontend:
     build:
-      context: ./frontend
+      context: ./frontend/frontend
       dockerfile: Dockerfile
     ports:
       - "80:80"

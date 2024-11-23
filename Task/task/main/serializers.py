@@ -17,7 +17,7 @@ class ProjectSerializer(serializers.ModelSerializer):
         subject = 'Вас добавили в проект'
         message = f'Здравствуйте, Вас добавили в новый проект: "{project.title}".'
         from_email = 'Poklpokl12@yandex.ru'
-        recipient_list = [user.email for user in project_users]  # Список email пользователей проекта
+        recipient_list = [user.email for user in project_users]
         send_mail(subject, message, from_email, recipient_list, fail_silently=False)
 
         for user in project_users:
@@ -29,8 +29,10 @@ class ProjectSerializer(serializers.ModelSerializer):
                 task=None
             )
             user.user_projects.add(project)
+            # user.user_all_projects.add(project.title)
 
         return project
+
 
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
