@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const ProfileForm = ({ userId }) => {
+  const [projects, setProjects] = useState([]);
   const [userData, setUserData] = useState({
     username: '',
     first_name: '',
@@ -9,7 +10,8 @@ const ProfileForm = ({ userId }) => {
     email: '',
     avatar: null,
     role: '',
-    password: ''
+    password: '',
+    user_projects: []  // Добавьте это поле
   });
 
   const [error, setError] = useState(null);
@@ -28,6 +30,20 @@ const ProfileForm = ({ userId }) => {
       }
     };
 
+    const fetchProjects = async () => {
+      try {
+          const response = await axios.get('http://127.0.0.1:8000/api/v1/projects/', {
+              headers: {
+                  'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+              }
+          });
+          setProjects(response.data);
+      } catch (error) {
+          setError('Ошибка при загрузке проектов');
+      }
+    };
+
+    fetchProjects();
     fetchUser();
   }, [userId]);
 
@@ -82,13 +98,14 @@ const ProfileForm = ({ userId }) => {
       {error && <p style={{ color: 'red' }}>{error}</p>}
       
       {/* Отображение аватара пользователя */}
+
+      <form onSubmit={handleSubmit}>
+
       {userData.avatar && (
         <div>
           <img src={userData.avatar} alt="User Avatar" style={{ width: '100px', height: '100px', borderRadius: '50%' }} />
         </div>
       )}
-
-      <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="username">Username:</label>
           <input
@@ -165,9 +182,16 @@ const ProfileForm = ({ userId }) => {
             type="password"
             id="password"
             name="password"
-            value={userData.password}
             onChange={handleChange}
           />
+        </div> 
+        <div>
+            <p className='user_projects'>Текущие проекты:</p>
+            {projects 
+              .filter(project => userData.user_projects && userData.user_projects.includes(project.id))
+              .map(project => (
+                <p key={project.id} className='user_projects'>{project.title}</p>
+              ))}
         </div>
         <button className='button' type="submit">Update Profile</button>
       </form>

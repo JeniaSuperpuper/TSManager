@@ -362,3 +362,7 @@ button[type="submit"]:active {
 .message_text {
   color: #000;
 }
+
+.user_projects {
+  color: #000;
+}
