@@ -4,6 +4,12 @@ from rest_framework.test import APITestCase
 from .models import Message
 from users.models import User
 from main.models import Project, Task
+import os
+import django
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'task.settings')
+django.setup()
+
 
 class MessageViewTests(APITestCase):
     def setUp(self):

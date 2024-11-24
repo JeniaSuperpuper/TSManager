@@ -16,11 +16,9 @@ import os
 
 from environs import Env
 
-env = Env()  # Создаем экземпляр класса Env
+env = Env()
 env.read_env()
-#
-# p_user = env('POSTGRES_DB')
-# print(p_user)
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -34,7 +32,7 @@ SECRET_KEY = 'django-insecure-h$6(o*d5f_3)o_n#r%)(5pqq(%_(sum#$czw$dmcrx#w$y1fbs
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1']
 
 # Application definition
 

@@ -18,7 +18,7 @@ const TaskList = ({ projectId, onBack }) => {
         responsible_for_test: ''
     });
     const [isSuperuser, setIsSuperuser] = useState(false);
-    const [sortBy, setSortBy] = useState('created_asc'); // По умолчанию сортировка по времени создания (от старых к новым)
+    const [sortBy, setSortBy] = useState('created'); // По умолчанию сортировка по времени создания (от старых к новым)
 
     useEffect(() => {
         const fetchTasks = async () => {
@@ -26,6 +26,9 @@ const TaskList = ({ projectId, onBack }) => {
                 const response = await axios.get(`http://127.0.0.1:8000/api/v1/projects/${projectId}/tasks/`, {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+                    },
+                    params: {
+                        ordering: sortBy
                     }
                 });
                 setTasks(response.data);
@@ -46,7 +49,7 @@ const TaskList = ({ projectId, onBack }) => {
             fetchTasks();
             checkSuperuser();
         }
-    }, [projectId]);
+    }, [projectId, sortBy]);
 
     const handleEditTask = (taskId) => {
         const taskToEdit = tasks.find(task => task.id === taskId);
@@ -102,49 +105,19 @@ const TaskList = ({ projectId, onBack }) => {
         setSortBy(e.target.value);
     };
 
-    const applySort = () => {
-        let sortedTasks = [...tasks];
-
-        switch (sortBy) {
-            case 'status_asc':
-                sortedTasks.sort((a, b) => a.status.localeCompare(b.status));
-                break;
-            case 'status_desc':
-                sortedTasks.sort((a, b) => b.status.localeCompare(a.status));
-                break;
-            case 'priority_asc':
-                sortedTasks.sort((a, b) => a.priority.localeCompare(b.priority));
-                break;
-            case 'priority_desc':
-                sortedTasks.sort((a, b) => b.priority.localeCompare(a.priority));
-                break;
-            case 'executor_asc':
-                sortedTasks.sort((a, b) => a.executor.localeCompare(b.executor));
-                break;
-            case 'executor_desc':
-                sortedTasks.sort((a, b) => b.executor.localeCompare(a.executor));
-                break;
-            default:
-                break;
-        }
-
-        setTasks(sortedTasks);
-    };
-
     return (
         <div className="task-list-container">
             <button className="back-button" onClick={onBack}>Назад</button>
             <div className="sort-controls">
                 <label htmlFor="sortBy">Сортировать по:</label>
                 <select id="sortBy" value={sortBy} onChange={handleSortChange}>
-                    <option value="status_asc">Статусу (от А до Я)</option>
-                    <option value="status_desc">Статусу (от Я до А)</option>
-                    <option value="priority_asc">Приоритету (от А до Я)</option>
-                    <option value="priority_desc">Приоритету (от Я до А)</option>
-                    <option value="executor_asc">Исполнителю (от А до Я)</option>
-                    <option value="executor_desc">Исполнителю (от Я до А)</option>
+                    <option value="status">Статусу (от А до Я)</option>
+                    <option value="-status">Статусу (от Я до А)</option>
+                    <option value="priority">Приоритету (от А до Я)</option>
+                    <option value="-priority">Приоритету (от Я до А)</option>
+                    <option value="executor">Исполнителю (от А до Я)</option>
+                    <option value="-executor">Исполнителю (от Я до А)</option>
                 </select>
-                <button className='button' onClick={applySort}>Применить сортировку</button>
             </div>
             {error && <div className="error-message">{error}</div>}
             {editingTaskId ? (

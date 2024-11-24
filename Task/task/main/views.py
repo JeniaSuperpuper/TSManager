@@ -51,11 +51,48 @@ class ProjectUpdate(generics.RetrieveUpdateDestroyAPIView):
 class TaskView(generics.ListCreateAPIView):
     serializer_class = TaskSerializer
     permission_classes = (IsAuthenticatedOrReadOnly, )
+
     def get_queryset(self):
         project_id = self.kwargs.get('project_id')
+        queryset = Task.objects.all()
+
         if project_id:
-            return Task.objects.filter(project_id=project_id)
-        return Task.objects.all()
+            queryset = queryset.filter(project_id=project_id)
+
+        created_from = self.request.query_params.get('created_from', None)
+        created_to = self.request.query_params.get('created_to', None)
+        updated_from = self.request.query_params.get('updated_from', None)
+        updated_to = self.request.query_params.get('updated_to', None)
+        term_from = self.request.query_params.get('term_from', None)
+        term_to = self.request.query_params.get('term_to', None)
+
+        if created_from and created_to:
+            queryset = queryset.filter(created__range=(created_from, created_to))
+        elif created_from:
+            queryset = queryset.filter(created__gte=created_from)
+        elif created_to:
+            queryset = queryset.filter(created__lte=created_to)
+
+        if updated_from and updated_to:
+            queryset = queryset.filter(update__range=(updated_from, updated_to))
+        elif updated_from:
+            queryset = queryset.filter(update__gte=updated_from)
+        elif updated_to:
+            queryset = queryset.filter(update__lte=updated_to)
+
+        if term_from and term_to:
+            queryset = queryset.filter(term__range=(term_from, term_to))
+        elif term_from:
+            queryset = queryset.filter(term__gte=term_from)
+        elif term_to:
+            queryset = queryset.filter(term__lte=term_to)
+
+        # Сортировка
+        ordering = self.request.query_params.get('ordering', None)
+        if ordering:
+            queryset = queryset.order_by(ordering)
+
+        return queryset
 
 
 

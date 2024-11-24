@@ -1,5 +1,3 @@
-from django.utils import timezone
-
 from django.db import models
 from users.models import User
 from main.models import Project, Task

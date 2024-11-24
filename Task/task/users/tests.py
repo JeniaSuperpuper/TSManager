@@ -1,7 +1,13 @@
+import os
+import django
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 from .models import User
+from rest_framework_simplejwt.tokens import RefreshToken
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'your_project_name.settings')
+django.setup()
 
 class UserViewTests(APITestCase):
     def setUp(self):
@@ -61,4 +67,18 @@ class UserViewTests(APITestCase):
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(User.objects.count(), 2)
+
+    def test_login_user(self):
+        """
+        Тестирование логина пользователя с использованием JWT.
+        """
+        url = reverse('token_obtain_pair')  # Замените 'token_obtain_pair' на ваш фактический URL-именованный маршрут
+        data = {
+            'username': 'testuser',
+            'password': 'testpass'
+        }
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn('access', response.data)  # Проверка, что в ответе есть access токен
+        self.assertIn('refresh', response.data)  # Проверка, что в ответе есть refresh токен
 

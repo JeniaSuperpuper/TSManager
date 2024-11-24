@@ -3,6 +3,7 @@ import ProjectList from './components/ProjectList';
 import TaskList from './components/TaskList';
 import './App.css';
 import Header from './components/header';
+import Chat from './components/Chat';
 
 function App() {
   // Хуй sadas
@@ -29,6 +30,8 @@ function App() {
           <ProjectList onProjectSelect={handleProjectSelect} />
         </>
       )}
+
+      <Chat />
 
     </div>
   );
