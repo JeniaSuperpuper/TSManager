@@ -10,10 +10,14 @@ COPY requirements.txt .
 # Устанавливаем зависимости
 RUN pip install -r requirements.txt
 
-RUN pip install daphne
+RUN pip install daphne whitenoise
+
 
 # Копируем весь проект
 COPY . .
+
+RUN python manage.py collectstatic --noinput
+
 
 # Открываем порт
 EXPOSE 8000

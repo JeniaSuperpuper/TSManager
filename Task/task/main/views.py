@@ -1,14 +1,20 @@
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
-
 from .serializers import ProjectSerializer, TaskSerializer, CommentSerializer
 from rest_framework import generics
 from .models import Project, Task, Comment
+
 # Create your views here.
 
-from rest_framework import generics
-from django.db.models import Q
-
 class ProjectView(generics.ListCreateAPIView):
+    """
+    get:
+    Возвращает список всех проектов.
+    Можно фильтровать по дате создания и обновления.
+    Можно сортировать по указанному полю.
+
+    post:
+    Создает новый проект.
+    """
     serializer_class = ProjectSerializer
     permission_classes = (IsAuthenticatedOrReadOnly, )
 
@@ -43,11 +49,30 @@ class ProjectView(generics.ListCreateAPIView):
         return queryset
 
 class ProjectUpdate(generics.RetrieveUpdateDestroyAPIView):
+    """
+    get:
+    Возвращает проект по его ID.
+
+    put:
+    Обновляет проект по его ID.
+
+    delete:
+    Удаляет проект по его ID.
+    """
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
     permission_classes = (IsAuthenticated, )
 
 class TaskView(generics.ListCreateAPIView):
+    """
+    get:
+    Возвращает список всех задач.
+    Можно фильтровать по дате создания, обновления и сроку выполнения.
+    Можно сортировать по указанному полю.
+
+    post:
+    Создает новую задачу.
+    """
     serializer_class = TaskSerializer
     permission_classes = (IsAuthenticatedOrReadOnly, )
 
@@ -94,12 +119,31 @@ class TaskView(generics.ListCreateAPIView):
         return queryset
 
 class TaskUpdate(generics.RetrieveUpdateDestroyAPIView):
+    """
+    get:
+    Возвращает задачу по её ID.
+
+    put:
+    Обновляет задачу по её ID.
+
+    delete:
+    Удаляет задачу по её ID.
+    """
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
     permission_classes = (IsAuthenticatedOrReadOnly, )
 
 class CommentView(generics.ListCreateAPIView):
+    """
+    get:
+    Возвращает список всех комментариев.
+    Можно фильтровать по ID задачи.
+
+    post:
+    Создает новый комментарий.
+    """
     serializer_class = CommentSerializer
+
     def get_queryset(self):
         task_id = self.kwargs.get('task_id')
         if task_id:
@@ -107,5 +151,15 @@ class CommentView(generics.ListCreateAPIView):
         return Comment.objects.all()
 
 class CommentUpdate(generics.RetrieveUpdateDestroyAPIView):
+    """
+    get:
+    Возвращает комментарий по его ID.
+
+    put:
+    Обновляет комментарий по его ID.
+
+    delete:
+    Удаляет комментарий по его ID.
+    """
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
