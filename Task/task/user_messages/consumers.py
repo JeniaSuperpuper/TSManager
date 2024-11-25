@@ -34,13 +34,12 @@ class NotificationsConsumer(AsyncWebsocketConsumer):
         )
 
     async def send_notification(self, event):
-        owner = event["owner"]
-        type_msg = event['type']
-        title = event['title']
-        text = event['text']
         payload = {
-            'owner': owner,
-            'title': title,
-            'text': text
+            'title': event['title'],
+            'text': event['text'],
+            'owner': event['owner'],
+            'created': event['created'],
+            'project': event['project'],
+            'task': event['task'],
         }
-        await self.send(text_data=json.dumps(owner))
+        await self.send(text_data=json.dumps(payload, ensure_ascii=False))

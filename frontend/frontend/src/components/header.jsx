@@ -21,7 +21,7 @@ function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userId, setUserId] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [messageCount, setMessageCount] = useState(0); // Добавляем состояние для количества сообщений
+  const [messageCount, setMessageCount] = useState(0);
 
   useEffect(() => {
     const checkLoggedIn = () => {
@@ -30,8 +30,8 @@ function Header() {
         setIsLoggedIn(true);
         try {
           const decodedToken = jwtDecode(accessToken);
-          setUserId(decodedToken.user_id); // Предполагается, что поле user_id содержит userId
-          setIsAdmin(decodedToken.is_superuser); // Используем поле is_superuser для проверки роли администратора
+          setUserId(decodedToken.user_id);
+          setIsAdmin(decodedToken.is_superuser);
         } catch (error) {
           console.error('Error decoding JWT token:', error);
         }
@@ -40,7 +40,6 @@ function Header() {
 
     checkLoggedIn();
 
-    // Настройка axios interceptors
     axios.interceptors.response.use(
       response => response,
       error => {
@@ -85,9 +84,9 @@ function Header() {
           <Modal active={profileModalActive} setActive={setProfileModalActive}>
             <ProfileForm userId={userId} />
           </Modal>
-          <button onClick={() => setMessageModalActive(true)} className='button'>Messages ({messageCount})</button> {/* Отображаем количество сообщений */}
+          <button onClick={() => setMessageModalActive(true)} className='button'>Messages ({messageCount})</button> 
           <Modal active={messageModalActive} setActive={setMessageModalActive}>
-            <MessagesComponent setMessageCount={setMessageCount} /> {/* Передаем функцию для обновления количества сообщений */}
+            <MessagesComponent setMessageCount={setMessageCount} /> 
           </Modal>
         </>
       ) : (

@@ -31,7 +31,6 @@ const DeleteProjectForm = () => {
                 }
             });
 
-            // Обновляем список проектов
             const updatedProjects = projects.filter(proj => proj.id !== project);
             setProjects(updatedProjects);
             setProject('');

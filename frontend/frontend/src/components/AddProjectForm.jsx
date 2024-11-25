@@ -10,7 +10,6 @@ const AddProjectForm = () => {
     const [error, setError] = useState('');
 
     useEffect(() => {
-        // Загрузка списка пользователей
         const fetchUsers = async () => {
             try {
                 const response = await axios.get('http://127.0.0.1:8000/api/v1/users/', {
@@ -42,14 +41,12 @@ const AddProjectForm = () => {
                 }
             });
 
-            // Очищаем форму после успешного добавления
             setTitle('');
             setDescription('');
             setStatus('AC');
             setSelectedUsers([]);
             setError('');
 
-            // Обновляем список проектов
             window.location.reload();
         } catch (error) {
             setError('Ошибка при добавлении проекта');

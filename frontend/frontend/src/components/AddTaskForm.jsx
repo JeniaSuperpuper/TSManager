@@ -64,7 +64,6 @@ const AddTaskForm = () => {
                 }
             });
 
-            // Очищаем форму после успешного добавления
             setTitle('');
             setDescription('');
             setProject('');
@@ -75,7 +74,6 @@ const AddTaskForm = () => {
             setResponsibleForTest('');
             setError('');
 
-            // Обновляем список задач
             window.location.reload();
         } catch (error) {
             setError('Ошибка при добавлении задачи');

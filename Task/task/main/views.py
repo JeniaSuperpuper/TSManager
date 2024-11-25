@@ -47,7 +47,6 @@ class ProjectUpdate(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ProjectSerializer
     permission_classes = (IsAuthenticated, )
 
-
 class TaskView(generics.ListCreateAPIView):
     serializer_class = TaskSerializer
     permission_classes = (IsAuthenticatedOrReadOnly, )
@@ -93,8 +92,6 @@ class TaskView(generics.ListCreateAPIView):
             queryset = queryset.order_by(ordering)
 
         return queryset
-
-
 
 class TaskUpdate(generics.RetrieveUpdateDestroyAPIView):
     queryset = Task.objects.all()

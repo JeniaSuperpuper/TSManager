@@ -6,7 +6,7 @@ const ProjectList = ({ onProjectSelect }) => {
     const [projects, setProjects] = useState([]);
     const [users, setUsers] = useState([]);
     const [error, setError] = useState('');
-    const [sortBy, setSortBy] = useState('created'); // По умолчанию сортировка по времени создания (от старых к новым)
+    const [sortBy, setSortBy] = useState('created');
     const [currentUserId, setCurrentUserId] = useState(null);
     const [isSuperuser, setIsSuperuser] = useState(false);
     const [editingProjectId, setEditingProjectId] = useState(null);
@@ -47,7 +47,6 @@ const ProjectList = ({ onProjectSelect }) => {
             }
         };
 
-        // Декодируем JWT-токен для получения user_id и is_superuser
         const token = localStorage.getItem('access_token');
         if (token) {
             const decodedToken = jwtDecode(token);
@@ -65,7 +64,7 @@ const ProjectList = ({ onProjectSelect }) => {
 
     const filterProjectsByUser = () => {
         if (isSuperuser) {
-            return projects; // Суперпользователь видит все проекты
+            return projects;
         } else if (currentUserId) {
             return projects.filter(project => project.project_users.includes(currentUserId) && project.status === 'AC');
         }
@@ -75,7 +74,7 @@ const ProjectList = ({ onProjectSelect }) => {
     const filteredProjects = filterProjectsByUser();
 
     const handleEditProject = (projectId) => {
-        if (!isSuperuser) return; // Только суперпользователь может редактировать проекты
+        if (!isSuperuser) return;
 
         const projectToEdit = projects.find(project => project.id === projectId);
         if (projectToEdit) {
@@ -90,7 +89,7 @@ const ProjectList = ({ onProjectSelect }) => {
     };
 
     const handleSaveProject = async () => {
-        if (!isSuperuser) return; // Только суперпользователь может сохранять изменения
+        if (!isSuperuser) return;
 
         try {
             await axios.put(`http://127.0.0.1:8000/api/v1/projects/${editingProjectId}/`, editedProject, {

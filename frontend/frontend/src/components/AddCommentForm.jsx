@@ -29,11 +29,9 @@ const AddCommentForm = ({ taskId, onCommentAdded }) => {
                 }
             });
 
-            // Очищаем форму после успешного добавления
             setBody('');
             setError('');
 
-            // Вызываем функцию обратного вызова для обновления списка комментариев
             onCommentAdded(response.data);
         } catch (error) {
             setError('Ошибка при добавлении комментария');

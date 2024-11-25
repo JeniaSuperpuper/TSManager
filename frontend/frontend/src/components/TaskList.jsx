@@ -18,7 +18,7 @@ const TaskList = ({ projectId, onBack }) => {
         responsible_for_test: ''
     });
     const [isSuperuser, setIsSuperuser] = useState(false);
-    const [sortBy, setSortBy] = useState('created'); // По умолчанию сортировка по времени создания (от старых к новым)
+    const [sortBy, setSortBy] = useState('created');
 
     useEffect(() => {
         const fetchTasks = async () => {

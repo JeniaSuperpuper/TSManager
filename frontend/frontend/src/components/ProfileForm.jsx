@@ -96,8 +96,6 @@ const ProfileForm = ({ userId }) => {
       <h2>Profile</h2>
       {success && <p style={{ color: 'green' }}>Profile updated successfully!</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}
-      
-      {/* Отображение аватара пользователя */}
 
       <form onSubmit={handleSubmit}>
 

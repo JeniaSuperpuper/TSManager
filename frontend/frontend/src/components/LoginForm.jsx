@@ -15,11 +15,9 @@ const LoginForm = () => {
                 password
             });
 
-            // Сохраняем токен в localStorage или другом хранилище
             localStorage.setItem('access_token', response.data.access);
             localStorage.setItem('refresh_token', response.data.refresh);
 
-            // Перенаправляем пользователя на нужную страницу
             window.location.href = '/';
         } catch (error) {
             setError('Неверное имя пользователя или пароль');
