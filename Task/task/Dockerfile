@@ -10,6 +10,8 @@ COPY requirements.txt .
 # Устанавливаем зависимости
 RUN pip install -r requirements.txt
 
+RUN pip install daphne
+
 # Копируем весь проект
 COPY . .
 
@@ -17,4 +19,5 @@ COPY . .
 EXPOSE 8000
 
 # Запускаем Django сервер
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["daphne", "-b", "0.0.0.0", "-p", "8000", "task.asgi:application"]

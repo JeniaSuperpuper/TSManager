@@ -28,6 +28,7 @@ class ProjectSerializer(serializers.ModelSerializer):
                 project=project,
                 task=None
             )
+
             user.user_projects.add(project)
             # user.user_all_projects.add(project.title)
 

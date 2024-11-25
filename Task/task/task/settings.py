@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'user_messages.apps.UserMessagesConfig',
     'channels',
+    'drf_yasg',
 ]
 
 CORS_ALLOWED_ORIGINS = [

@@ -76,7 +76,7 @@ const ProfileForm = ({ userId }) => {
     }
 
     try {
-      const response = await axios.put(`http://127.0.0.1:8000/api/v1/users/${userId}`, formData, {
+      const response = await axios.put(`http://127.0.0.1:8000/api/v1/users/${userId}/`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }

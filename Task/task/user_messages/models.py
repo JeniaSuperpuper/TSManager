@@ -1,3 +1,5 @@
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 from django.db import models
 from users.models import User
 from main.models import Project, Task
@@ -12,5 +14,22 @@ class Message(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     task = models.ForeignKey(Task, on_delete=models.CASCADE, null=True, blank=True  )
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        self.send_notification()
+
+    def send_notification(self):
+        channel_layer = get_channel_layer()
+        print('dsfsdfdds')
+        async_to_sync(channel_layer.group_send)(
+            f"user_{self.owner}",
+            {
+                "type": "send_notification",
+                "owner": self.owner,
+                "title": self.title,
+                "text": self.text,
+
+            }
+        )
     def __str__(self):
         return self.title

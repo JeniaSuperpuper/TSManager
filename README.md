@@ -7,7 +7,7 @@ Trecker — это проект для отслеживания задач и п
 
 1. Клонируйте репозиторий:
    ```bash
-   git clone https://github.com/yourusername/Trecker.git
+   git clone https://github.com/JeniaSuperpuper/TSManager.git
    cd Trecker
    ```
 2. Установите зависимости для бэкенда:
